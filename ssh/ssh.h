@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.2
+ * @version 2.5.4
  **/
 
 #ifndef _SSH_H
@@ -50,16 +50,16 @@
 /*
  * CycloneSSH Open is licensed under GPL version 2. In particular:
  *
- * - If you link your program to CycloneCRYPTO Open, the result is a derivative
+ * - If you link your program to CycloneSSH Open, the result is a derivative
  *   work that can only be distributed under the same GPL license terms.
  *
- * - If additions or changes to CycloneCRYPTO Open are made, the result is a
+ * - If additions or changes to CycloneSSH Open are made, the result is a
  *   derivative work that can only be distributed under the same license terms.
  *
  * - The GPL license requires that you make the source code available to
  *   whoever you make the binary available to.
  *
- * - If you sell or distribute a hardware product that runs CycloneCRYPTO Open,
+ * - If you sell or distribute a hardware product that runs CycloneSSH Open,
  *   the GPL license requires you to provide public and full access to all
  *   source code on a nondiscriminatory basis.
  *
@@ -74,13 +74,13 @@
 #endif
 
 //Version string
-#define CYCLONE_SSH_VERSION_STRING "2.5.2"
+#define CYCLONE_SSH_VERSION_STRING "2.5.4"
 //Major version
 #define CYCLONE_SSH_MAJOR_VERSION 2
 //Minor version
 #define CYCLONE_SSH_MINOR_VERSION 5
 //Revision number
-#define CYCLONE_SSH_REV_NUMBER 2
+#define CYCLONE_SSH_REV_NUMBER 4
 
 //SSH support
 #ifndef SSH_SUPPORT
