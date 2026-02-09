@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 #ifndef _SSH_KEX_HYBRID_H
@@ -58,11 +58,11 @@ error_t sshParseKexHybridReply(SshConnection *connection,
 error_t sshParseKexHybridMessage(SshConnection *connection, uint8_t type,
    const uint8_t *message, size_t length);
 
-error_t sshSelectKemAlgo(SshConnection *connection);
+error_t sshSelectPqAlgo(SshConnection *connection);
 
-error_t sshSelectClassicalEcdhCurve(SshConnection *connection);
-error_t sshGenerateClassicalEcdhKeyPair(SshConnection *connection);
-error_t sshComputeClassicalEcdhSharedSecret(SshConnection *connection);
+error_t sshSelectClassicalAlgo(SshConnection *connection);
+error_t sshGenerateClassicalKeyPair(SshConnection *connection);
+error_t sshComputeClassicalSharedSecret(SshConnection *connection);
 
 error_t sshDigestClientInit(SshConnection *connection);
 

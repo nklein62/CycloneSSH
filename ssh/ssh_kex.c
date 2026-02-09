@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -39,6 +39,7 @@
 #include "ssh/ssh_kex_dh.h"
 #include "ssh/ssh_kex_dh_gex.h"
 #include "ssh/ssh_kex_ecdh.h"
+#include "ssh/ssh_kex_kem.h"
 #include "ssh/ssh_kex_hybrid.h"
 #include "ssh/ssh_packet.h"
 #include "ssh/ssh_key_material.h"
@@ -145,6 +146,15 @@ error_t sshSendKexInit(SshConnection *connection)
             {
                //The client sends an SSH_MSG_KEX_ECDH_INIT message
                connection->state = SSH_CONN_STATE_KEX_ECDH_INIT;
+            }
+            else
+#endif
+#if (SSH_KEM_KEX_SUPPORT == ENABLED)
+            //Pure post-quantum key exchange algorithm?
+            if(sshIsKemKexAlgo(connection->kexAlgo))
+            {
+               //The client sends an SSH_MSG_KEX_KEM_INIT message
+               connection->state = SSH_CONN_STATE_KEX_KEM_INIT;
             }
             else
 #endif
@@ -963,6 +973,15 @@ error_t sshParseKexInit(SshConnection *connection, const uint8_t *message,
       }
       else
 #endif
+#if (SSH_KEM_KEX_SUPPORT == ENABLED)
+      //Pure post-quantum key exchange algorithm?
+      if(sshIsKemKexAlgo(connection->kexAlgo))
+      {
+         //The client sends an SSH_MSG_KEX_KEM_INIT message
+         connection->state = SSH_CONN_STATE_KEX_KEM_INIT;
+      }
+      else
+#endif
 #if (SSH_HYBRID_KEX_SUPPORT == ENABLED)
       //Post-quantum hybrid key exchange algorithm?
       if(sshIsHybridKexAlgo(connection->kexAlgo))
@@ -1146,6 +1165,15 @@ error_t sshParseKexMessage(SshConnection *connection, uint8_t type,
       {
          //Parse ECDH specific messages
          error = sshParseKexEcdhMessage(connection, type, message, length);
+      }
+      else
+#endif
+#if (SSH_KEM_KEX_SUPPORT == ENABLED)
+      //Pure post-quantum key exchange algorithm?
+      if(sshIsKemKexAlgo(connection->kexAlgo))
+      {
+         //Parse ML-KEM specific messages
+         error = sshParseKexKemMessage(connection, type, message, length);
       }
       else
 #endif

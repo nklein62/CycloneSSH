@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 #ifndef _SSH_ALGORITHMS_H
@@ -86,7 +86,7 @@ bool_t sshIsRsaKexAlgo(const char_t *kexAlgo);
 bool_t sshIsDhKexAlgo(const char_t *kexAlgo);
 bool_t sshIsDhGexKexAlgo(const char_t *kexAlgo);
 bool_t sshIsEcdhKexAlgo(const char_t *kexAlgo);
-bool_t sshIsMlkemKexAlgo(const char_t *kexAlgo);
+bool_t sshIsKemKexAlgo(const char_t *kexAlgo);
 bool_t sshIsHybridKexAlgo(const char_t *kexAlgo);
 
 bool_t sshIsCertPublicKeyAlgo(const SshString *publicKeyAlgo);

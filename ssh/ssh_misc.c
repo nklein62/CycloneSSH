@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -41,6 +41,7 @@
 #include "ssh/ssh_kex_dh.h"
 #include "ssh/ssh_kex_dh_gex.h"
 #include "ssh/ssh_kex_ecdh.h"
+#include "ssh/ssh_kex_kem.h"
 #include "ssh/ssh_kex_hybrid.h"
 #include "ssh/ssh_auth.h"
 #include "ssh/ssh_channel.h"
@@ -308,6 +309,7 @@ void sshRegisterConnectionEvents(SshContext *context, SshConnection *connection,
          connection->state == SSH_CONN_STATE_KEX_DH_INIT ||
          connection->state == SSH_CONN_STATE_KEX_DH_GEX_REQUEST ||
          connection->state == SSH_CONN_STATE_KEX_ECDH_INIT ||
+         connection->state == SSH_CONN_STATE_KEX_KEM_INIT ||
          connection->state == SSH_CONN_STATE_KEX_HYBRID_INIT ||
          connection->state == SSH_CONN_STATE_CLIENT_NEW_KEYS ||
          connection->state == SSH_CONN_STATE_CLIENT_EXT_INFO ||
@@ -468,6 +470,13 @@ error_t sshProcessConnectionEvents(SshContext *context,
                error = sshSendKexEcdhInit(connection);
             }
 #endif
+#if (SSH_KEM_KEX_SUPPORT == ENABLED)
+            else if(connection->state == SSH_CONN_STATE_KEX_KEM_INIT)
+            {
+               //Send SSH_MSG_KEX_KEM_INIT message
+               error = sshSendKexKemInit(connection);
+            }
+#endif
 #if (SSH_HYBRID_KEX_SUPPORT == ENABLED)
             else if(connection->state == SSH_CONN_STATE_KEX_HYBRID_INIT)
             {
@@ -500,6 +509,7 @@ error_t sshProcessConnectionEvents(SshContext *context,
                connection->state == SSH_CONN_STATE_KEX_DH_GEX_GROUP ||
                connection->state == SSH_CONN_STATE_KEX_DH_GEX_REPLY ||
                connection->state == SSH_CONN_STATE_KEX_ECDH_REPLY ||
+               connection->state == SSH_CONN_STATE_KEX_KEM_REPLY ||
                connection->state == SSH_CONN_STATE_KEX_HYBRID_REPLY ||
                connection->state == SSH_CONN_STATE_SERVER_NEW_KEYS ||
                connection->state == SSH_CONN_STATE_SERVER_EXT_INFO_1 ||
@@ -573,6 +583,7 @@ error_t sshProcessConnectionEvents(SshContext *context,
                connection->state == SSH_CONN_STATE_KEX_DH_GEX_REQUEST ||
                connection->state == SSH_CONN_STATE_KEX_DH_GEX_INIT ||
                connection->state == SSH_CONN_STATE_KEX_ECDH_INIT ||
+               connection->state == SSH_CONN_STATE_KEX_KEM_INIT ||
                connection->state == SSH_CONN_STATE_KEX_HYBRID_INIT ||
                connection->state == SSH_CONN_STATE_CLIENT_NEW_KEYS ||
                connection->state == SSH_CONN_STATE_CLIENT_EXT_INFO ||

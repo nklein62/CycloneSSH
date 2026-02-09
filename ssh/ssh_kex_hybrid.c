@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -70,7 +70,7 @@ error_t sshSendKexHybridInit(SshConnection *connection)
    message = connection->buffer + SSH_PACKET_HEADER_SIZE;
 
    //Key exchange algorithms are formulated as key encapsulation mechanisms
-   error = sshSelectKemAlgo(connection);
+   error = sshSelectPqAlgo(connection);
 
    //Check status code
    if(!error)
@@ -84,14 +84,14 @@ error_t sshSendKexHybridInit(SshConnection *connection)
    if(!error)
    {
       //Select ECDH domain parameters
-      error = sshSelectClassicalEcdhCurve(connection);
+      error = sshSelectClassicalAlgo(connection);
    }
 
    //Check status code
    if(!error)
    {
       //Generate a classical ECDH key pair
-      error = sshGenerateClassicalEcdhKeyPair(connection);
+      error = sshGenerateClassicalKeyPair(connection);
    }
 
    //Check status code
@@ -145,7 +145,7 @@ error_t sshSendKexHybridReply(SshConnection *connection)
    message = connection->buffer + SSH_PACKET_HEADER_SIZE;
 
    //Generate a classical ECDH key pair
-   error = sshGenerateClassicalEcdhKeyPair(connection);
+   error = sshGenerateClassicalKeyPair(connection);
 
    //Check status code
    if(!error)
@@ -317,7 +317,7 @@ error_t sshFormatKexHybridReply(SshConnection *connection, uint8_t *p,
    *length += sizeof(uint32_t) + m + n;
 
    //Compute the shared secret K_CL
-   error = sshComputeClassicalEcdhSharedSecret(connection);
+   error = sshComputeClassicalSharedSecret(connection);
    //Any error to report?
    if(error)
       return error;
@@ -429,7 +429,7 @@ error_t sshParseKexHybridInit(SshConnection *connection,
       return error;
 
    //Key exchange algorithms are formulated as key encapsulation mechanisms
-   error = sshSelectKemAlgo(connection);
+   error = sshSelectPqAlgo(connection);
    //Any error to report?
    if(error)
       return error;
@@ -448,7 +448,7 @@ error_t sshParseKexHybridInit(SshConnection *connection,
       return error;
 
    //Select ECDH domain parameters
-   error = sshSelectClassicalEcdhCurve(connection);
+   error = sshSelectClassicalAlgo(connection);
    //Any error to report?
    if(error)
       return error;
@@ -621,7 +621,7 @@ error_t sshParseKexHybridReply(SshConnection *connection,
       return error;
 
    //Compute the classical shared secret K_CL
-   error = sshComputeClassicalEcdhSharedSecret(connection);
+   error = sshComputeClassicalSharedSecret(connection);
    //Any error to report?
    if(error)
       return error;
@@ -733,7 +733,7 @@ error_t sshParseKexHybridMessage(SshConnection *connection, uint8_t type,
  * @return Error code
  **/
 
-error_t sshSelectKemAlgo(SshConnection *connection)
+error_t sshSelectPqAlgo(SshConnection *connection)
 {
    error_t error;
 
@@ -792,7 +792,7 @@ error_t sshSelectKemAlgo(SshConnection *connection)
  * @return Error code
  **/
 
-error_t sshSelectClassicalEcdhCurve(SshConnection *connection)
+error_t sshSelectClassicalAlgo(SshConnection *connection)
 {
    error_t error;
    const EcCurve *curve;
@@ -851,7 +851,7 @@ error_t sshSelectClassicalEcdhCurve(SshConnection *connection)
  * @return Error code
  **/
 
-error_t sshGenerateClassicalEcdhKeyPair(SshConnection *connection)
+error_t sshGenerateClassicalKeyPair(SshConnection *connection)
 {
    error_t error;
    SshContext *context;
@@ -893,7 +893,7 @@ error_t sshGenerateClassicalEcdhKeyPair(SshConnection *connection)
  * @return Error code
  **/
 
-error_t sshComputeClassicalEcdhSharedSecret(SshConnection *connection)
+error_t sshComputeClassicalSharedSecret(SshConnection *connection)
 {
    error_t error;
 

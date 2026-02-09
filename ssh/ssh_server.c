@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -54,6 +54,8 @@ void sshServerGetDefaultSettings(SshServerSettings *settings)
    settings->task.stackSize = SSH_SERVER_STACK_SIZE;
    settings->task.priority = SSH_SERVER_PRIORITY;
 
+   //TCP/IP stack context
+   settings->netContext = NULL;
    //The SSH server is not bound to any interface
    settings->interface = NULL;
 
@@ -157,6 +159,20 @@ error_t sshServerInit(SshServerContext *context,
    //Initialize task parameters
    context->taskParams = settings->task;
    context->taskId = OS_INVALID_TASK_ID;
+
+   //Attach TCP/IP stack context
+   if(settings->netContext != NULL)
+   {
+      context->netContext = settings->netContext;
+   }
+   else if(settings->interface != NULL)
+   {
+      context->netContext = settings->interface->netContext;
+   }
+   else
+   {
+      context->netContext = netGetDefaultContext();
+   }
 
    //Save settings
    context->interface = settings->interface;
@@ -662,8 +678,8 @@ error_t sshServerStart(SshServerContext *context)
    do
    {
       //Open a TCP socket
-      context->socket = socketOpen(SOCKET_TYPE_STREAM, SOCKET_IP_PROTO_TCP);
-
+      context->socket = socketOpenEx(context->netContext, SOCKET_TYPE_STREAM,
+         SOCKET_IP_PROTO_TCP);
       //Failed to open socket?
       if(context->socket == NULL)
       {

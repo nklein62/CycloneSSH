@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -65,6 +65,18 @@ static const char_t *const sshSupportedKexAlgos[] =
 #if (SSH_HYBRID_KEX_SUPPORT == ENABLED && SSH_MLKEM1024_SUPPORT == ENABLED && \
    SSH_NISTP384_SUPPORT == ENABLED && SSH_SHA384_SUPPORT == ENABLED)
    "mlkem1024nistp384-sha384",
+#endif
+#if (SSH_KEM_KEX_SUPPORT == ENABLED && SSH_MLKEM512_SUPPORT == ENABLED && \
+   SSH_SHA256_SUPPORT == ENABLED)
+   "mlkem512-sha256",
+#endif
+#if (SSH_KEM_KEX_SUPPORT == ENABLED && SSH_MLKEM768_SUPPORT == ENABLED && \
+   SSH_SHA256_SUPPORT == ENABLED)
+   "mlkem768-sha256",
+#endif
+#if (SSH_KEM_KEX_SUPPORT == ENABLED && SSH_MLKEM1024_SUPPORT == ENABLED && \
+   SSH_SHA384_SUPPORT == ENABLED)
+   "mlkem1024-sha384",
 #endif
 #if (SSH_ECDH_KEX_SUPPORT == ENABLED && SSH_CURVE25519_SUPPORT == ENABLED && \
    SSH_SHA256_SUPPORT == ENABLED)
@@ -246,6 +258,11 @@ static const SshHostKeyAlgo sshSupportedHostKeyAlgos[] =
 #if (SSH_RSA_SIGN_SUPPORT == ENABLED && SSH_SHA256_SUPPORT == ENABLED && \
    SSH_CERT_SUPPORT == ENABLED)
    {
+      "rsa-sha2-256-cert",
+      "ssh-rsa-cert",
+      "rsa-sha2-256"
+   },
+   {
       "rsa-sha2-256-cert-v01@openssh.com",
       "ssh-rsa-cert-v01@openssh.com",
       "rsa-sha2-256"
@@ -260,6 +277,11 @@ static const SshHostKeyAlgo sshSupportedHostKeyAlgos[] =
 #endif
 #if (SSH_RSA_SIGN_SUPPORT == ENABLED && SSH_SHA512_SUPPORT == ENABLED && \
    SSH_CERT_SUPPORT == ENABLED)
+   {
+      "rsa-sha2-512-cert",
+      "ssh-rsa-cert",
+      "rsa-sha2-512"
+   },
    {
       "rsa-sha2-512-cert-v01@openssh.com",
       "ssh-rsa-cert-v01@openssh.com",
@@ -1573,7 +1595,7 @@ bool_t sshIsEcdhKexAlgo(const char_t *kexAlgo)
  * @return TRUE if ML-KEM key exchange algorithm, else FALSE
  **/
 
-bool_t sshIsMlkemKexAlgo(const char_t *kexAlgo)
+bool_t sshIsKemKexAlgo(const char_t *kexAlgo)
 {
    //ML-KEM key exchange algorithm?
    if(sshCompareAlgo(kexAlgo, "mlkem512-sha256") ||
@@ -1624,15 +1646,17 @@ bool_t sshIsCertPublicKeyAlgo(const SshString *publicKeyAlgo)
    //Check public key algorithm name
    if(sshCompareString(publicKeyAlgo, "ssh-rsa-cert") ||
       sshCompareString(publicKeyAlgo, "ssh-rsa-cert-v01@openssh.com") ||
+      sshCompareString(publicKeyAlgo, "rsa-sha2-256-cert") ||
       sshCompareString(publicKeyAlgo, "rsa-sha2-256-cert-v01@openssh.com") ||
+      sshCompareString(publicKeyAlgo, "rsa-sha2-512-cert") ||
       sshCompareString(publicKeyAlgo, "rsa-sha2-512-cert-v01@openssh.com") ||
       sshCompareString(publicKeyAlgo, "ssh-dss-cert") ||
       sshCompareString(publicKeyAlgo, "ssh-dss-cert-v01@openssh.com") ||
       sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp256-cert") ||
-      sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp384-cert") ||
-      sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp521-cert") ||
       sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp256-cert-v01@openssh.com") ||
+      sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp384-cert") ||
       sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp384-cert-v01@openssh.com") ||
+      sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp521-cert") ||
       sshCompareString(publicKeyAlgo, "ecdsa-sha2-nistp521-cert-v01@openssh.com") ||
       sshCompareString(publicKeyAlgo, "ssh-ed25519-cert") ||
       sshCompareString(publicKeyAlgo, "ssh-ed25519-cert-v01@openssh.com") ||

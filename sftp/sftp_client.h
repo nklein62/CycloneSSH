@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 #ifndef _SFTP_CLIENT_H
@@ -149,6 +149,7 @@ struct _SftpClientContext
 {
    SftpVersion version;                             ///<SFTP protocol version
    SftpClientState state;                           ///<SFTP client state
+   NetContext *netContext;                          ///<TCP/IP stack context
    NetInterface *interface;                         ///<Underlying network interface
    SftpClientSshInitCallback sshInitCallback;       ///<SSH initialization callback function
    systime_t timeout;                               ///<Timeout value

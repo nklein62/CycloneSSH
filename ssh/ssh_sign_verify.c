@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -239,6 +239,7 @@ error_t sshVerifyRsaSignature(const SshString *publicKeyAlgo,
 #if (SSH_SHA256_SUPPORT == ENABLED)
    //RSA with SHA-256 public key algorithm?
    if(sshCompareString(publicKeyAlgo, "rsa-sha2-256") ||
+      sshCompareString(publicKeyAlgo, "rsa-sha2-256-cert") ||
       sshCompareString(publicKeyAlgo, "rsa-sha2-256-cert-v01@openssh.com"))
    {
       //Select the relevant hash algorithm
@@ -249,6 +250,7 @@ error_t sshVerifyRsaSignature(const SshString *publicKeyAlgo,
 #if (SSH_SHA512_SUPPORT == ENABLED)
    //RSA with SHA-512 public key algorithm?
    if(sshCompareString(publicKeyAlgo, "rsa-sha2-512") ||
+      sshCompareString(publicKeyAlgo, "rsa-sha2-512-cert") ||
       sshCompareString(publicKeyAlgo, "rsa-sha2-512-cert-v01@openssh.com"))
    {
       //Select the relevant hash algorithm

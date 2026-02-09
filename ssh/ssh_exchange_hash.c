@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -90,6 +90,8 @@ error_t sshInitExchangeHash(SshConnection *connection)
       sshCompareAlgo(kexAlgo, "ecdh-sha2-nistp256") ||
       sshCompareAlgo(kexAlgo, "curve25519-sha256") ||
       sshCompareAlgo(kexAlgo, "curve25519-sha256@libssh.org") ||
+      sshCompareAlgo(kexAlgo, "mlkem512-sha256") ||
+      sshCompareAlgo(kexAlgo, "mlkem768-sha256") ||
       sshCompareAlgo(kexAlgo, "mlkem768nistp256-sha256") ||
       sshCompareAlgo(kexAlgo, "mlkem768x25519-sha256"))
    {
@@ -102,6 +104,7 @@ error_t sshInitExchangeHash(SshConnection *connection)
    //Key exchange with SHA-384 as hash?
    if(sshCompareAlgo(kexAlgo, "diffie-hellman-group-exchange-sha384@ssh.com") ||
       sshCompareAlgo(kexAlgo, "ecdh-sha2-nistp384") ||
+      sshCompareAlgo(kexAlgo, "mlkem1024-sha384") ||
       sshCompareAlgo(kexAlgo, "mlkem1024nistp384-sha384"))
    {
       //Select the relevant hash algorithm

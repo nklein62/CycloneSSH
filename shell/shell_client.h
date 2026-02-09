@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 #ifndef _SHELL_CLIENT_H
@@ -101,17 +101,18 @@ typedef error_t (*ShellClientSshInitCallback)(ShellClientContext *context,
 struct _ShellClientContext
 {
    ShellClientState state;                     ///<Shell client state
-   NetInterface *interface;                  ///<Underlying network interface
+   NetContext *netContext;                     ///<TCP/IP stack context
+   NetInterface *interface;                    ///<Underlying network interface
    ShellClientSshInitCallback sshInitCallback; ///<SSH initialization callback function
-   systime_t timeout;                        ///<Timeout value
-   systime_t timestamp;                      ///<Timestamp to manage timeout
+   systime_t timeout;                          ///<Timeout value
+   systime_t timestamp;                        ///<Timestamp to manage timeout
    char_t buffer[SHELL_CLIENT_BUFFER_SIZE];    ///<Memory buffer for input/output operations
-   size_t bufferLen;                         ///<Length of the buffer, in bytes
-   size_t bufferPos;                         ///<Current position in the buffer
-   uint32_t exitStatus;                      ///<Exit status
-   SshContext sshContext;                    ///<SSH context
-   SshConnection sshConnection;              ///<SSH connection
-   SshChannel sshChannel;                    ///<SSH channel
+   size_t bufferLen;                           ///<Length of the buffer, in bytes
+   size_t bufferPos;                           ///<Current position in the buffer
+   uint32_t exitStatus;                        ///<Exit status
+   SshContext sshContext;                      ///<SSH context
+   SshConnection sshConnection;                ///<SSH connection
+   SshChannel sshChannel;                      ///<SSH channel
 };
 
 

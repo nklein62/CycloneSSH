@@ -6,7 +6,7 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * Copyright (C) 2019-2025 Oryx Embedded SARL. All rights reserved.
+ * Copyright (C) 2019-2026 Oryx Embedded SARL. All rights reserved.
  *
  * This file is part of CycloneSSH Open.
  *
@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.5.4
+ * @version 2.6.0
  **/
 
 //Switch to the appropriate trace level
@@ -567,8 +567,7 @@ error_t sshParseKexRsaSecret(SshConnection *connection, const uint8_t *message,
       //The server should send SSH_MESSAGE_DISCONNECT with a reason code of
       //SSH_DISCONNECT_KEY_EXCHANGE_FAILED and must disconnect (refer to
       //RFC 4432, section 4)
-      error = sshSendDisconnect(connection, SSH_DISCONNECT_KEY_EXCHANGE_FAILED,
-         "Key exchanged failed");
+      error = ERROR_KEY_EXCH_FAILED;
    }
    else
    {
